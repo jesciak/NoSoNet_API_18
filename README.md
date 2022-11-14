@@ -15,7 +15,7 @@ Social Network API using a NoSQL database using Mongo DB and Mongoose ODM
 ## Usage
 
 
- ![screenshot](./assets/images/Screen%20Shot%202022-11-13%20at%2010.34.56%20PM.png)
+ ![screenshot](./assets/images/)
  
 ## License
 MIT License
