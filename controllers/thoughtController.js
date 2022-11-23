@@ -4,15 +4,21 @@ module.exports = {
     // get all thoughts
     getThoughts(req, res) {
         Thought.find()
-            .then((thoughts) => res.json(thoughts))
-            .catch((err) => res.status(500).json(err));
+        .sort({ createdAt: -1 })
+        .then((dbThoughtData) => {
+          res.json(dbThoughtData);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500).json(err);
+        });
     },
     //get single thought by ID
-    getSingleThought({ params }, res) {
-        Thought.findOne({ _id: params.thoughtId })
+    getSingleThought(req, res) {
+        Thought.findOne({ _id: req.params.thoughtId })
             .select('__v')
-            .populate('thought')
-            .populate('friends')
+            // .populate('thought')
+            // .populate('friends')
             .then((thought) =>
                 !thought
                     ? res.status(404).json({ message: 'No thought with that ID' })
@@ -70,7 +76,7 @@ module.exports = {
             })
             .catch((err) => res.status(500).json(err));
     },
-// add reaction to thought
+    // add reaction to thought
     addReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
@@ -90,7 +96,7 @@ module.exports = {
     deleteReaction({ params }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
-            { $pull: { reactions: { reactionId: params.id }}},
+            { $pull: { reactions: { reactionId: params.id } } },
             { new: true }
         )
             .then((dbThoughtData) => {
